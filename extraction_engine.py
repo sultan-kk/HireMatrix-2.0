@@ -74,17 +74,42 @@ def preprocess_image(pil_image: Image.Image) -> Image.Image:
     return Image.fromarray(thresh)
 
 
-def ocr_image_to_lines(pil_image: Image.Image, lang: str = "eng") -> list:
-    """
-    Runs pytesseract in data mode so we get a confidence score per
-    recognised word, then groups words back into lines using Tesseract's
-    own (block, par, line) numbering. Returns line dicts in reading order.
-    """
-    data = pytesseract.image_to_data(
-        pil_image, lang=lang, output_type=pytesseract.Output.DICT,
-        config="--oem 3 --psm 3",
-    )
+from google import genai
 
+# Yahan apni copy ki hui API key paste kar dein
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
+    try:
+        prompt = (
+            "Extract all the text from this resume/CV image accurately. "
+            "Maintain the logical reading order, handling multi-column layouts "
+            "and sidebars correctly from top to bottom, left to right. "
+            "Return the extracted text clearly."
+        )
+
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=[pil_image, prompt]
+        )
+        
+        extracted_text = response.text if response and response.text else ""
+        raw_lines = extracted_text.split("\n")
+        
+        results = []
+        for line in raw_lines:
+            cleaned_line = line.strip()
+            if cleaned_line:
+                results.append({
+                    "text": cleaned_line,
+                    "confidence": 99.0,
+                    "bbox": (0, 0, 0, 0)
+                })
+        
+        return results
+
+    except Exception as e:
+        print(f"Gemini OCR Error: {e}")
+        return []
     lines = {}
     for i in range(len(data["text"])):
         word = data["text"][i].strip()
