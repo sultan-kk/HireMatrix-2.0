@@ -95,23 +95,18 @@ def inject_css():
             
         }}
         div[data-testid="stButton"] button {{
-            width: 50px;
+            width: 100%;
             min-width: 40px;
             padding: 0.2rem 0.3rem;
             font-size: 0.75rem;
         }}
 
-    div[data-testid="stExpander"] stExpander {{
-            width:70px;
-            min-width:32px;
-            padding: 0.5rem 0.2rem;
-            font-size: 0.7rem;
-       }}
+
          div[data-testid="stExpander"] div[data-testid="stButton"] button {{
-            width:50px;
+            width:45px;
             min-width:32px;
             padding: 0.5rem 0.2rem;
-            font-size: 0.7rem;
+            font-size: 0.50rem;
         }}
 
         /* ---- Cards ---- */
