@@ -104,21 +104,14 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
         )
         
         text = response.text.strip()
-        if text.startswith("json"):
-            text = text[7:-3].strip()
-        if text.endswith(""):
-            text = text[:-3].strip()
-            
-        parsed_data = json.loads(text)
+        raw_lines = text.split("\n")
+        results = []
+        for line in raw_lines:
+            cleaned = line.strip()
+            if cleaned:
+                results.append({"text": cleaned})
         
-        # App aur parser ki sari required keys yahan mukammal di gayi hain taake KeyError na aaye
-        return {
-            "relevant": parsed_data,
-            "irrelevant": [],
-            "unmapped": [],
-            "unmapped_relevant_lines": []
-        }
-
+        return results  # Yeh list return ho gi jo parser.py ko chahiye
     except Exception as e:
         st.error(f"Extraction Error: {e}")
         return {
