@@ -90,7 +90,7 @@ if not api_key:
 # Client initialize karein
 client = genai.Client(api_key=api_key)
 def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
-    try:
+  
         prompt = (
         "Extract the following information from this CV image and return ONLY a valid JSON object "
         "with these exact keys: "
@@ -103,7 +103,7 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
         contents=[pil_image, prompt]
     )
     
-   
+   try:
         # Gemini ke response se JSON nikalna
         text = response.text.strip()
         if text.startswith("```json"):
