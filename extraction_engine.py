@@ -102,11 +102,18 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
             model='gemini-2.0-flash',
             contents=[pil_image, prompt]
         )
-        st.write("API Full Response:", response)
-        # Yeh line check karegi ke response theek aa raha hai ya nahi
-        if not response or not response.text:
-            st.warning("API ne khali response diya hai.")
-            return []
+       response = client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=[pil_image, prompt]
+        )
+        
+        # Yeh line screen par poora raw response print kar degi taake asal wajah pata chale
+        st.write("Raw Response Object:", response)
+        
+        if response and hasattr(response, 'text') and response.text:
+            extracted_text = response.text
+        else:
+            extracted_text = ""
             
         extracted_text = response.text
         raw_lines = extracted_text.split("\n")
