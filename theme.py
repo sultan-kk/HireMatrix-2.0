@@ -101,13 +101,17 @@ def inject_css():
             font-size: 0.75rem;
         }}
 
-    
+    div[data-testid="stExpander"] stExpander {{
+            width:70px;
+            min-width:32px;
+            padding: 0.5rem 0.2rem;
+            font-size: 0.7rem;
+       }}
          div[data-testid="stExpander"] div[data-testid="stButton"] button {{
             width:50px;
             min-width:32px;
             padding: 0.5rem 0.2rem;
             font-size: 0.7rem;
-            flex-wrap: nowrap;
         }}
 
         /* ---- Cards ---- */
