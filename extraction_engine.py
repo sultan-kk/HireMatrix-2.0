@@ -103,7 +103,7 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
         contents=[pil_image, prompt]
     )
     
-    try:
+   
         # Gemini ke response se JSON nikalna
         text = response.text.strip()
         if text.startswith("```json"):
