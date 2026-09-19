@@ -85,7 +85,11 @@ def inject_css():
             background: {CORAL};
             border-color: {CORAL};
         }}
-        section[data-testid="stSidebar"] input, section[data-testid="stSidebar"] textarea, section[data-testid="stSidebar"] [data-baseweb="select"] {{
+        section[data-testid="stSidebar"] input, 
+        section[data-testid="stSidebar"] textarea, 
+        section[data-testid="stSidebar"] [data-baseweb="select"] 
+        section[data-testid="stSidebar"] [data-baseweb="select"] span, 
+        section[data-testid="stSidebar"] [data-baseweb="select"] div {{
             color: {TEXT} !important;
             
         }}
