@@ -103,7 +103,7 @@ def inject_css():
 
 
          div[data-testid="stExpander"] div[data-testid="stButton"] button {{
-            width:50px;
+            width:100%;
             min-width:20px;
             padding: 0.5rem 0.2rem;
             font-size: 0.35rem;
