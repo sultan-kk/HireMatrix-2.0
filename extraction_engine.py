@@ -109,7 +109,9 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
         for line in raw_lines:
             cleaned = line.strip()
             if cleaned:
-                results.append({"text": cleaned})
+                results.append({"text": cleaned
+                               "confidence": 1.0
+                })
         
         return results  # Yeh list return ho gi jo parser.py ko chahiye
     except Exception as e:
