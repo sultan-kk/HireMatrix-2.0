@@ -106,7 +106,7 @@ def inject_css():
             width:45px;
             min-width:32px;
             padding: 0.5rem 0.2rem;
-            font-size: 0.50rem;
+            font-size: 0.40rem;
         }}
 
         /* ---- Cards ---- */
