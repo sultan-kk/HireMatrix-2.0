@@ -115,6 +115,13 @@ def inject_css():
             padding: 2px 4px;
             font-size: 0.75rem;
         }}
+         div[data-testid="stExpander"] div[data-testid="stButton"] button {{
+            width:100%;
+            min-width:32px;
+            padding: 0.5rem 0.2rem;
+            font-size: 0.7rem;
+        }}
+
         /* ---- Cards ---- */
         .hm-card {{
             background: {CARD_BG};
