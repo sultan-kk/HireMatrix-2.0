@@ -73,7 +73,7 @@ def preprocess_image(pil_image: Image.Image) -> Image.Image:
     )
     return Image.fromarray(thresh)
 
-
+import json
 import streamlit as st
 from google import genai
 
@@ -92,28 +92,27 @@ client = genai.Client(api_key=api_key)
 def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
     try:
         prompt = (
-            "Extract all the text from this resume/CV image accurately. "
-            "Maintain the logical reading order, handling multi-column layouts "
-            "and sidebars correctly from top to bottom, left to right. "
-            "Return the extracted text clearly."
-        )
+        "Extract the following information from this CV image and return ONLY a valid JSON object "
+        "with these exact keys: "
+        '{"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}. '
+        "If a field is missing, leave it as an empty string."
+    )
 
-        response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=[pil_image, prompt]
-        )
-        
-        extracted_text = response.text if response and hasattr(response, 'text') else ""
-        raw_lines = extracted_text.split("\n")
-
-        results = []
-        for line in raw_lines:
-            cleaned_line = line.strip()
-            if cleaned_line:
-                results.append({"text": cleaned_line, "confidence": 1.0})
-        return results
-      
-        st.write("Extracted Lines Results:",results)
+    response = client.models.generate_content(
+        model='gemini-2.0-flash',
+        contents=[pil_image, prompt]
+    )
+    
+    try:
+        # Gemini ke response se JSON nikalna
+        text = response.text.strip()
+        if text.startswith("```json"):
+            text = text[7:-3].strip()
+        parsed_data = json.loads(text)
+    except:
+        parsed_data = {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}
+    
+    return {"relevant": parsed_data, "unmapped": []}
 
     except Exception as e:
         st.error(f"OCR Error: {e}")
