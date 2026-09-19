@@ -101,20 +101,7 @@ def inject_css():
             font-size: 0.75rem;
         }}
 
-        
-
-         div[data-testid="stExpander"] .row-widget, div[data-testid="stExpander"] div{{
-            display: flex;
-            flex-wrap: nowrap;
-            align-item: center;
-        }}
-
-         div[data-testid="stExpander"] button {{
-            flex: 1;
-            min-width: 35px;
-            padding: 2px 4px;
-            font-size: 0.75rem;
-        }}
+    
          div[data-testid="stExpander"] div[data-testid="stButton"] button {{
             width:100%;
             min-width:32px;
