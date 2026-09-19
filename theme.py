@@ -27,6 +27,10 @@ BORDER = "#E5E7EB"
 TEXT = "#1E1B4B"
 MUTED = "#6B7280"
 INK_ON_DARK = "#E2E8F0"
+base="light"
+primaryColor="#0c83c1"
+secondaryBackgroundColor="#f1c997"
+textColor="#0a0a0a"
 
 
 def _b64_image(path: str) -> str:
@@ -170,6 +174,9 @@ def inject_css():
         .hm-badge-ocr {{ background: #FFF7ED; color: #C2410C; }}
 
         .block-container {{ padding-top: 1.6rem; }}
+        [theme]
+
+
         </style>
         """,
         unsafe_allow_html=True,
