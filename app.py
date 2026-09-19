@@ -250,7 +250,7 @@ elif st.session_state.nav == "review":
             st.markdown('<div class="hm-card">', unsafe_allow_html=True)
             theme.section_header(t("original_doc", L))
             if data["preview"] is not None:
-                st.image(data["preview"], use_container_width=True)
+                st.image(data["preview"], use_column_width=True)
             else:
                 all_text = "\n".join(
                     l["text"] for l in (data["unmapped"] or [])
