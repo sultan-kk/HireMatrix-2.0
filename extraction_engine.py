@@ -89,7 +89,7 @@ if not api_key:
 
 # Client initialize karein
 client = genai.Client(api_key=api_key)
-def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
+def ocr_image_to_lines(pil_image):
     try:
         prompt = (
             "Extract the following information from this CV image and return ONLY a valid JSON object "
