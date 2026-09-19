@@ -74,10 +74,21 @@ def preprocess_image(pil_image: Image.Image) -> Image.Image:
     return Image.fromarray(thresh)
 
 
+import streamlit as st
 from google import genai
 
-# Yahan apni copy ki hui API key paste kar dein
-client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
+# Streamlit secrets ya local .env se key uthane ka tareeqa
+api_key = None
+try:
+    api_key = st.secrets.get("GEMINI_API_KEY")
+except Exception:
+    pass
+
+if not api_key:
+    api_key = os.environ.get("GEMINI_API_KEY")
+
+# Client initialize karein
+client = genai.Client(api_key=api_key)
 def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
     try:
         prompt = (
