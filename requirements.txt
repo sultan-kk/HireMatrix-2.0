@@ -1,0 +1,29 @@
+streamlit==1.38.0
+pandas==2.2.2
+openpyxl==3.1.5
+numpy==1.26.4
+
+# OCR pipeline (images + scanned PDF pages) — needs packages.txt for the
+# actual tesseract/poppler system binaries; these are just the Python bindings.
+pytesseract==0.3.10
+pdf2image==1.17.0
+opencv-python-headless==4.10.0.84
+Pillow==10.4.0
+
+# Native (non-OCR) text extraction — the accurate, fast path for
+# born-digital PDFs and Word documents.
+pdfplumber==0.11.4
+python-docx==1.1.2
+
+# Accurate WORLDWIDE phone number detection/validation.
+phonenumbers==8.13.44
+
+# Name detection via NER. The direct wheel URL below installs the English
+# model AS PART OF `pip install -r requirements.txt` — no separate
+# `python -m spacy download` step needed, which is what breaks on
+# Streamlit Community Cloud (you can't run extra shell commands there,
+# only requirements.txt + packages.txt are applied automatically). This
+# also fixes the "spacy model missing" error some local setups hit when
+# spacy was installed in a different Python environment than Streamlit.
+spacy==3.7.5
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
