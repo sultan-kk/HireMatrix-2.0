@@ -60,9 +60,6 @@ if L == "ur":
 def process_uploaded_file(uploaded_file):
     with st.spinner(f"{uploaded_file.name} ..."):
         lines, preview, notice = extraction_engine.extract_lines_from_file(uploaded_file)
-    if isinstance(lines, dict):
-        result = lines
-    else:
         result = parser.parse_resume(lines)
 
     ext = uploaded_file.name.lower().rsplit(".", 1)[-1]
