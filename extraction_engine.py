@@ -82,7 +82,7 @@ def ocr_image_to_lines(pil_image: Image.Image, lang: str = "eng") -> list:
     """
     data = pytesseract.image_to_data(
         pil_image, lang=lang, output_type=pytesseract.Output.DICT,
-        config="--oem 3 --psm 6",
+        config="--oem 3 --psm 3",
     )
 
     lines = {}
