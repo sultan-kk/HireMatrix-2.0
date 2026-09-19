@@ -90,30 +90,32 @@ if not api_key:
 # Client initialize karein
 client = genai.Client(api_key=api_key)
 def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
-  
-        prompt = (
-        "Extract the following information from this CV image and return ONLY a valid JSON object "
-        "with these exact keys: "
-        '{"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}. '
-        "If a field is missing, leave it as an empty string."
-    )
-
-    response = client.models.generate_content(
-        model='gemini-2.0-flash',
-        contents=[pil_image, prompt]
-    )
-    
     try:
+        prompt = (
+            "Extract the following information from this CV image and return ONLY a valid JSON object "
+            "with these exact keys: "
+            '{"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}. '
+            "If a field is missing, leave it as an empty string."
+        )
+
+        response = client.models.generate_content(
+            model='gemini-2.0-flash',
+            contents=[pil_image, prompt]
+        )
+        
         # Gemini ke response se JSON nikalna
         text = response.text.strip()
-        if text.startswith("```json"):
+        if text.startswith("json"):
             text = text[7:-3].strip()
+        if text.endswith(""):
+            text = text[:-3].strip()
+            
         parsed_data = json.loads(text)
-    except:
-        parsed_data = {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}
-    
-    return {"relevant": parsed_data, "unmapped": []}
+        return {"relevant": parsed_data, "unmapped": []}
 
+    except Exception as e:
+        st.error(f"OCR/Extraction Error: {e}")
+        return {"relevant": {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}, "unmapped": []}
     except Exception as e:
         st.error(f"OCR Error: {e}")
         return []
