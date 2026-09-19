@@ -89,11 +89,13 @@ if not api_key:
 
 # Client initialize karein
 client = genai.Client(api_key=api_key)
-def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
+def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
     try:
         prompt = (
-            "Extract all text from this resume image accurately line by line, "
-            "preserving the reading order from top to bottom."
+            "Extract the following information from this resume/CV image and return ONLY a valid JSON object "
+            "with these exact keys: "
+            '{"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}. '
+            "If a field is missing, leave it as an empty string. Do not include any extra text."
         )
 
         response = client.models.generate_content(
@@ -101,19 +103,30 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
             contents=[pil_image, prompt]
         )
         
-        extracted_text = response.text if response and hasattr(response, 'text') else ""
-        raw_lines = extracted_text.split("\n")
-
-        results = []
-        for line in raw_lines:
-            cleaned_line = line.strip()
-            if cleaned_line:
-                results.append({"text": cleaned_line})
-        return results
+        text = response.text.strip()
+        if text.startswith("json"):
+            text = text[7:-3].strip()
+        if text.endswith(""):
+            text = text[:-3].strip()
+            
+        parsed_data = json.loads(text)
+        
+        # App aur parser ki sari required keys yahan mukammal di gayi hain taake KeyError na aaye
+        return {
+            "relevant": parsed_data,
+            "irrelevant": [],
+            "unmapped": [],
+            "unmapped_relevant_lines": []
+        }
 
     except Exception as e:
-        st.error(f"OCR Error: {e}")
-        return []
+        st.error(f"Extraction Error: {e}")
+        return {
+            "relevant": {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""},
+            "irrelevant": [],
+            "unmapped": [],
+            "unmapped_relevant_lines": []
+        }
 
 # ---------------------------------------------------------------------------
 # Format: PNG / JPG / JPEG
