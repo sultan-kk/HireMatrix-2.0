@@ -103,23 +103,24 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
             contents=[pil_image, prompt]
         )
         
-        extracted_text = response.text if response and response.text else ""
+        # Yeh line check karegi ke response theek aa raha hai ya nahi
+        if not response or not response.text:
+            st.warning("API ne khali response diya hai.")
+            return []
+            
+        extracted_text = response.text
         raw_lines = extracted_text.split("\n")
-        
+
         results = []
         for line in raw_lines:
             cleaned_line = line.strip()
             if cleaned_line:
-                results.append({
-                    "text": cleaned_line,
-                    "confidence": 99.0,
-                    "bbox": (0, 0, 0, 0)
-                })
-        
+                results.append({"text": cleaned_line})
         return results
 
     except Exception as e:
-        print(f"Gemini OCR Error: {e}")
+        # Agar koi bhi error hoga toh woh foran Streamlit par show ho jayega
+        st.error(f"Detailed Extraction Error: {e}")
         return []
     lines = {}
     for i in range(len(data["text"])):
