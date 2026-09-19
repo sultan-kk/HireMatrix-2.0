@@ -100,6 +100,21 @@ def inject_css():
             padding: 0.2rem 0.3rem;
             font-size: 0.75rem;
         }}
+
+        
+
+         div[data-testid="stExpander"] .row-widget, div[data-testid="stExpander"] div{{
+            display: flex;
+            flex-wrap: nowrap;
+            align-item: center;
+        }}
+
+         div[data-testid="stExpander"] button {{
+            flex: 1;
+            min-width: 35px;
+            padding: 2px 4px;
+            font-size: 0.75rem;
+        }}
         /* ---- Cards ---- */
         .hm-card {{
             background: {CARD_BG};
