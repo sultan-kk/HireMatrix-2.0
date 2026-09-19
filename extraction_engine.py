@@ -102,32 +102,19 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
             model='gemini-2.0-flash',
             contents=[pil_image, prompt]
         )
-        response = client.models.generate_content(
-            model='gemini-2.0-flash',
-            contents=[pil_image, prompt]
-        )
         
-        # Yeh line screen par poora raw response print kar degi taake asal wajah pata chale
-        st.write("Raw Response Object:", response)
-        
-        if response and hasattr(response, 'text') and response.text:
-            extracted_text = response.text
-        else:
-            extracted_text = ""
-            
-        extracted_text = response.text
+        extracted_text = response.text if response and hasattr(response, 'text') else ""
         raw_lines = extracted_text.split("\n")
 
         results = []
         for line in raw_lines:
             cleaned_line = line.strip()
             if cleaned_line:
-                results.append({"text": cleaned_line})
+                results.append({"text": cleaned_line, "confidence": 1.0})
         return results
 
     except Exception as e:
-        # Agar koi bhi error hoga toh woh foran Streamlit par show ho jayega
-        st.error(f"Detailed Extraction Error: {e}")
+        st.error(f"OCR Error: {e}")
         return []
     lines = {}
     for i in range(len(data["text"])):
