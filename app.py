@@ -289,7 +289,7 @@ elif st.session_state.nav == "review":
                     for idx, item in enumerate(data["irrelevant"]):
                         if item["status"] in ("deleted", "restored"):
                             continue
-                        row = st.columns([3.5, 1.8, 1, 1.8, 1.8, 1.8])
+                        row = st.columns([3.5, 2, 1, 1.8, 1.8, 1.8])
                         row[0].write(item["text"])
                         row[1].write(item["reason"].replace("_", " "))
                         row[2].write(f"{item['confidence']}%")
