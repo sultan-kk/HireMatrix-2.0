@@ -94,7 +94,10 @@ def inject_css():
             color: {TEXT} !important;
             
         }}
-
+        div[data-testid="stButton"] button {
+            width: 100%;
+            min-width: 70px;
+        }
         /* ---- Cards ---- */
         .hm-card {{
             background: {CARD_BG};
