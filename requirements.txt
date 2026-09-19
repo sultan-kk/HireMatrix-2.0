@@ -2,7 +2,8 @@ streamlit==1.38.0
 pandas==2.2.2
 openpyxl==3.1.5
 numpy==1.26.4
-
+google-genai
+python-dotenv
 # OCR pipeline (images + scanned PDF pages) — needs packages.txt for the
 # actual tesseract/poppler system binaries; these are just the Python bindings.
 pytesseract==0.3.10
