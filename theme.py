@@ -95,7 +95,7 @@ def inject_css():
             
         }}
         div[data-testid="stButton"] button {{
-            width: 100%;
+            width: 50px;
             min-width: 40px;
             padding: 0.2rem 0.3rem;
             font-size: 0.75rem;
@@ -107,6 +107,7 @@ def inject_css():
             min-width:32px;
             padding: 0.5rem 0.2rem;
             font-size: 0.7rem;
+            flex-wrap: nowrap;
         }}
 
         /* ---- Cards ---- */
