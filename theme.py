@@ -103,8 +103,10 @@ def inject_css():
             background: {CARD_BG};
             border: 1px solid {BORDER};
             border-radius: 14px;
-            padding: 1.25rem 1.4rem;
+            padding: 1.25rem 1.2rem;
             margin-bottom: 1.1rem;
+            max-width: 100%;
+            box-sizing: border-box;
             box-shadow: 0 1px 3px rgba(30, 27, 75, 0.05);
         }}
         .hm-section-title {{
