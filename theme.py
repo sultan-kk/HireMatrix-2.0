@@ -96,7 +96,9 @@ def inject_css():
         }}
         div[data-testid="stButton"] button {{
             width: 100%;
-            min-width: 70px;
+            min-width: 40px;
+            padding: 0.2rem 0.3rem;
+            font-size: 0.75rem;
         }}
         /* ---- Cards ---- */
         .hm-card {{
