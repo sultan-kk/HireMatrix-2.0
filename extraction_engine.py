@@ -112,7 +112,7 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
             if cleaned_line:
                 results.append({"text": cleaned_line, "confidence": 1.0})
         return results
-      st.write("Extracted Lines Results:",results)
+       st.write("Extracted Lines Results:",results)
 
     except Exception as e:
         st.error(f"OCR Error: {e}")
