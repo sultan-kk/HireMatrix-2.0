@@ -114,7 +114,6 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
     except Exception as e:
         st.error(f"OCR Error: {e}")
         return []
-   
 
 # ---------------------------------------------------------------------------
 # Format: PNG / JPG / JPEG
