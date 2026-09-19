@@ -171,12 +171,6 @@ def inject_css():
         .hm-badge-ocr {{ background: #FFF7ED; color: #C2410C; }}
 
         .block-container {{ padding-top: 1.6rem; }}
-        [theme]
-
-        base="light"
-        primaryColor="#0c83c1"
-        secondaryBackgroundColor="#f1c997"
-        textColor="#0a0a0a"
         </style>
         """,
         unsafe_allow_html=True,
