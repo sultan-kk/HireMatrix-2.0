@@ -89,13 +89,11 @@ if not api_key:
 
 # Client initialize karein
 client = genai.Client(api_key=api_key)
-def ocr_image_to_lines(pil_image):
+def ocr_image_to_lines(pil_image, lang: str = "eng") -> list:
     try:
         prompt = (
-            "Extract the following information from this CV image and return ONLY a valid JSON object "
-            "with these exact keys: "
-            '{"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}. '
-            "If a field is missing, leave it as an empty string."
+            "Extract all text from this resume image accurately line by line, "
+            "preserving the reading order from top to bottom."
         )
 
         response = client.models.generate_content(
@@ -103,43 +101,20 @@ def ocr_image_to_lines(pil_image):
             contents=[pil_image, prompt]
         )
         
-        # Gemini ke response se JSON nikalna
-        text = response.text.strip()
-        if text.startswith("json"):
-            text = text[7:-3].strip()
-        if text.endswith(""):
-            text = text[:-3].strip()
-            
-        parsed_data = json.loads(text)
-        return {"relevant": parsed_data, "unmapped": []}
+        extracted_text = response.text if response and hasattr(response, 'text') else ""
+        raw_lines = extracted_text.split("\n")
 
-    except Exception as e:
-        st.error(f"OCR/Extraction Error: {e}")
-        return {"relevant": {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}, "unmapped": []}
+        results = []
+        for line in raw_lines:
+            cleaned_line = line.strip()
+            if cleaned_line:
+                results.append({"text": cleaned_line})
+        return results
+
     except Exception as e:
         st.error(f"OCR Error: {e}")
         return []
-    lines = {}
-    for i in range(len(data["text"])):
-        word = data["text"][i].strip()
-        conf = float(data["conf"][i])
-        if not word or conf < 0:
-            continue
-        key = (data["block_num"][i], data["par_num"][i], data["line_num"][i])
-        if key not in lines:
-            lines[key] = {"words": [], "confs": [], "x": data["left"][i], "y": data["top"][i]}
-        lines[key]["words"].append(word)
-        lines[key]["confs"].append(conf)
-        lines[key]["x"] = min(lines[key]["x"], data["left"][i])
-        lines[key]["y"] = min(lines[key]["y"], data["top"][i])
-
-    results = []
-    for entry in lines.values():
-        text = " ".join(entry["words"])
-        avg_conf = sum(entry["confs"]) / len(entry["confs"])
-        results.append({"text": text, "confidence": round(avg_conf, 1), "bbox": (entry["x"], entry["y"], 0, 0)})
-    return results
-
+   
 
 # ---------------------------------------------------------------------------
 # Format: PNG / JPG / JPEG
