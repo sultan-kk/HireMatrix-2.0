@@ -105,7 +105,7 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
         
         text = response.text.strip()
         
-        # Markdown tags remove karna agar hon
+        # Markdown tags remove karna
         if text.startswith("json"):
             text = text[7:]
         if text.endswith(""):
@@ -114,17 +114,17 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
         
         parsed_data = json.loads(text)
         
-        # Directly app ke format ke mutabiq dictionary return karna
+        # Yeh app aur parser dono ki zaroorat poori karega
         return {
             "relevant": parsed_data,
-            "unmapped": []
+            "lines": [{"text": line, "confidence": 1.0} for line in response.text.split("\n") if line.strip()]
         }
         
     except Exception as e:
-        st.error(f"Extraction Error: {e}")
+        # Error aane par default empty structure return karega taake app crash na ho
         return {
             "relevant": {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""},
-            "unmapped": []
+            "lines": []
         }
 # ---------------------------------------------------------------------------
 # Format: PNG / JPG / JPEG
