@@ -95,32 +95,37 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
             "Extract the following information from this resume/CV image and return ONLY a valid JSON object "
             "with these exact keys: "
             '{"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""}. '
-            "If a field is missing, leave it as an empty string. Do not include any extra text."
+            "If a field is missing, leave it as an empty string. Do not include any extra text or markdown formatting."
         )
-
+        
         response = client.models.generate_content(
-            model='gemini-3.6-flash',
+            model='gemini-3.6-flash',  # Aapka model name wahi rahega
             contents=[pil_image, prompt]
         )
         
         text = response.text.strip()
-        raw_lines = text.split("\n")
-        results = []
-        for line in raw_lines:
-            cleaned = line.strip()
-            if cleaned:
-                results.append({"text": cleaned,
-                               "confidence": 1.0
-                })
         
-        return results  # Yeh list return ho gi jo parser.py ko chahiye
+        # Agar markdown tags hon toh unhe remove karein
+        if text.startswith("json"):
+            text = text[7:]
+        if text.endswith(""):
+            text = text[:-3]
+        text = text.strip()
+        
+        # Gemini ke response ko JSON dictionary mein convert karein
+        parsed_data = json.loads(text)
+        
+        # Yahan list ki bajaye dictionary return karni hai taake blanks fill ho sakein
+        return {
+            "relevant": parsed_data,
+            "unmapped": []
+        }
+        
     except Exception as e:
         st.error(f"Extraction Error: {e}")
         return {
             "relevant": {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""},
-            "irrelevant": [],
-            "unmapped": [],
-            "unmapped_relevant_lines": []
+            "unmapped": []
         }
 
 # ---------------------------------------------------------------------------
