@@ -99,23 +99,22 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
         )
         
         response = client.models.generate_content(
-            model='gemini-3.6-flash',  # Aapka model name wahi rahega
+            model='gemini-3.6-flash',
             contents=[pil_image, prompt]
         )
         
         text = response.text.strip()
         
-        # Agar markdown tags hon toh unhe remove karein
+        # Markdown tags remove karna agar hon
         if text.startswith("json"):
             text = text[7:]
         if text.endswith(""):
             text = text[:-3]
         text = text.strip()
         
-        # Gemini ke response ko JSON dictionary mein convert karein
         parsed_data = json.loads(text)
         
-        # Yahan list ki bajaye dictionary return karni hai taake blanks fill ho sakein
+        # Directly app ke format ke mutabiq dictionary return karna
         return {
             "relevant": parsed_data,
             "unmapped": []
@@ -127,7 +126,6 @@ def ocr_image_to_lines(pil_image, lang: str = "eng") -> dict:
             "relevant": {"name": "", "phone": "", "email": "", "experience_years": "", "education": "", "skills": ""},
             "unmapped": []
         }
-
 # ---------------------------------------------------------------------------
 # Format: PNG / JPG / JPEG
 # ---------------------------------------------------------------------------
